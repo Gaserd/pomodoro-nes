@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pomodoro Timer — Desktop App</title>
+    <link href="https://unpkg.com/nes.css@2.3.0/css/nes.min.css" rel="stylesheet" />
+    <style>
+      body { margin: 0; font-family: 'Press Start 2P', cursive; }
+      .container { max-width: 860px; margin: 0 auto; padding: 24px; }
+      header { display:flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+      h1 { font-size: 18px; margin: 0; }
+      .hero { margin: 16px 0; }
+      .buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+      footer { margin-top: 24px; color: #666; font-size: 12px; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1 class="nes-text is-primary">Pomodoro Timer</h1>
+        <i class="nes-icon coin is-large"></i>
+      </header>
+
+      <section class="nes-container with-title hero">
+        <p class="title">About</p>
+        <p>A desktop Pomodoro timer with retro NES UI, click/finish sounds, and daily coin rewards.</p>
+        <ul>
+          <li>Work/Break durations (25/5 by default), Start/Pause/Skip/Reset</li>
+          <li>Frameless window with a custom close button</li>
+          <li>Random finish sound and per-button click sounds</li>
+          <li>Coins earned after each Work interval, daily stats saved locally</li>
+        </ul>
+        <div class="buttons">
+          <a class="nes-btn is-primary" href="../README.md">Readme</a>
+          <a class="nes-btn" href="https://nostalgic-css.github.io/NES.css/" target="_blank" rel="noreferrer">NES.css</a>
+        </div>
+      </section>
+
+      <section class="nes-container with-title">
+        <p class="title">Getting Started</p>
+        <p>Install dependencies and run in development:</p>
+<pre><code>npm install
+npm start</code></pre>
+        <p>Build Windows installer and portable:</p>
+<pre><code>npm run dist</code></pre>
+      </section>
+
+      <footer>
+        <span>MIT License</span>
+      </footer>
+    </div>
+  </body>
+  </html>
+
+

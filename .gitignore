@@ -1,0 +1,71 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log
+
+# Node modules
+node_modules/
+
+# Dependency caches
+.eslintcache
+.cache/
+.parcel-cache/
+
+# Build outputs
+build/
+dist/
+out/
+lib/
+bin/
+
+# TypeScript
+*.tsbuildinfo
+
+# Coverage
+coverage/
+
+# Env files
+.env
+.env.*
+!.env.example
+
+# Tooling
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/tasks.json
+!.vscode/launch.json
+.idea/
+
+# Framework-specific
+.next/
+.svelte-kit/
+.vercel/
+.netlify/
+storybook-static/
+.cypress/
+playwright-report/
+test-results/
+
+# Temporary files
+.tmp/
+.temp/
+tmp/
+*.pid
+*.seed
+*.pid.lock
+
+# OS-specific
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Firebase/other
+firebase-debug.log
+
+# Git credentials (if any)
+.git-credentials

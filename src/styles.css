@@ -1,0 +1,45 @@
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: 'Press Start 2P', cursive;
+}
+
+.app { max-width: 960px; margin: 0 auto; padding: 24px; }
+.header { display: flex; align-items: center; justify-content: space-between; -webkit-app-region: drag; }
+.header #close-btn { -webkit-app-region: no-drag; }
+.header h1 { margin: 0; font-size: 20px; }
+
+.controls { margin-top: 16px; }
+.controls .row { display: flex; gap: 16px; align-items: flex-end; flex-wrap: wrap; }
+.controls .row + .row { margin-top: 12px; }
+
+/* interactive elements must be non-draggable */
+button, input, select, textarea, .nes-container, .coin-wall { -webkit-app-region: no-drag; }
+
+.timers { display: inline-flex; gap: 16px; align-items: flex-end; }
+.buttons { display: inline-flex; gap: 8px; margin-left: auto; }
+
+.status { margin-top: 18px; }
+.status .mode { font-size: 12px; margin-bottom: 12px; }
+.status .time { font-size: 40px; line-height: 1; }
+
+.rewards { margin-top: 18px; }
+.rewards .rewards-row { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; }
+.coin-wall { display: flex; flex-wrap: wrap; gap: 8px 10px; }
+
+.stats { margin-top: 18px; }
+.calendar { width: 100%; }
+.calendar-title { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px; margin-bottom: 8px; }
+.calendar-title #cal-title-text { text-align: center; }
+.calendar-title #cal-prev { justify-self: start; }
+.calendar-title #cal-next { justify-self: end; }
+.calendar-head { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-bottom: 6px; }
+.calendar-head > div { font-size: 12px; text-align: center; opacity: 0.8; }
+.calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+.calendar-cell { min-height: 74px; border: 1px solid rgba(0,0,0,0.15); border-radius: 6px; padding: 6px; display: flex; flex-direction: column; justify-content: space-between; }
+.calendar-cell.empty { opacity: 0.35; }
+.calendar-cell .date { font-size: 11px; opacity: 0.7; }
+.calendar-cell .coins { display: flex; flex-wrap: wrap; gap: 2px; justify-content: flex-end; align-items: center; }
+.coins .more { font-size: 12px; margin-left: 4px; }
+

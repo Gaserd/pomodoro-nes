@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pomodoro Timer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+    <link href="https://unpkg.com/nes.css@2.3.0/css/nes.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="header">
+        <h1 class="nes-text is-primary">Pomodoro Timer</h1>
+        <button id="close-btn" class="nes-btn is-error" title="Close" aria-label="Close">✕</button>
+      </header>
+
+      <section class="controls nes-container with-title">
+        <p class="title">Settings</p>
+        <div class="row">
+          <div class="timers">
+            <div class="nes-field">
+              <label for="work-min">Work (min)</label>
+              <input id="work-min" class="nes-input" type="number" min="1" value="25" />
+            </div>
+            <div class="nes-field">
+              <label for="break-min">Break (min)</label>
+              <input id="break-min" class="nes-input" type="number" min="1" value="5" />
+            </div>
+          </div>
+          <div class="buttons">
+            <button id="start-btn" class="nes-btn is-primary">Start</button>
+            <button id="pause-btn" class="nes-btn">Pause</button>
+            <button id="skip-btn" class="nes-btn is-warning">Skip</button>
+            <button id="reset-btn" class="nes-btn is-error">Reset</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="status nes-container is-dark with-title">
+        <p class="title">Status</p>
+        <div class="mode" id="mode-label">Ready</div>
+        <div class="time nes-text is-success" id="time-left">25:00</div>
+      </section>
+
+      <section class="rewards nes-container with-title">
+        <p class="title">Rewards</p>
+        <div class="rewards-row">
+          <span class="nes-text">Today coins:</span>
+          <span id="coin-count" class="nes-text is-warning">0</span>
+        </div>
+        <div id="coin-wall" class="coin-wall" aria-label="earned coins"></div>
+      </section>
+
+      <section class="stats nes-container with-title">
+        <p class="title">Calendar</p>
+        <div class="calendar">
+          <div class="calendar-title">
+            <button id="cal-prev" class="nes-btn">◀</button>
+            <div id="cal-title-text" class="nes-text is-primary">Month YYYY</div>
+            <button id="cal-next" class="nes-btn">▶</button>
+          </div>
+          <div class="calendar-head">
+            <div>Mon</div>
+            <div>Tue</div>
+            <div>Wed</div>
+            <div>Thu</div>
+            <div>Fri</div>
+            <div>Sat</div>
+            <div>Sun</div>
+          </div>
+          <div id="calendar-grid" class="calendar-grid" aria-label="30-day coins calendar"></div>
+        </div>
+      </section>
+    </div>
+
+    <script src="./renderer.js"></script>
+  </body>
+  </html>
+
+
