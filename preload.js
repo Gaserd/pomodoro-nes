@@ -21,6 +21,11 @@ contextBridge.exposeInMainWorld('windowControls', {
   minimize: () => ipcRenderer.invoke('app:minimize'),
 });
 
+contextBridge.exposeInMainWorld('overlay', {
+  set: (dataUrl, description) => ipcRenderer.invoke('app:setOverlayIcon', dataUrl, description),
+  clear: () => ipcRenderer.invoke('app:clearOverlayIcon'),
+});
+
 window.addEventListener('DOMContentLoaded', () => {
   // no-op
 });

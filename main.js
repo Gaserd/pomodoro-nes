@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, nativeImage } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
@@ -142,6 +142,27 @@ ipcMain.handle('app:minimize', async () => {
   const win = BrowserWindow.getFocusedWindow();
   if (win) win.minimize();
   return true;
+});
+
+// Overlay icon (Windows taskbar) for timer
+ipcMain.handle('app:setOverlayIcon', async (_e, dataUrl, description = '') => {
+  const win = BrowserWindow.getFocusedWindow() || BrowserWindow.getAllWindows()[0];
+  if (!win || !dataUrl) return false;
+  try {
+    // accept data URL or base64 string
+    const base64 = String(dataUrl).startsWith('data:') ? String(dataUrl).split(',')[1] : String(dataUrl);
+    const img = nativeImage.createFromBuffer(Buffer.from(base64, 'base64'));
+    win.setOverlayIcon(img, description || 'Timer');
+    return true;
+  } catch (_) {
+    return false;
+  }
+});
+
+ipcMain.handle('app:clearOverlayIcon', async () => {
+  const win = BrowserWindow.getFocusedWindow() || BrowserWindow.getAllWindows()[0];
+  if (!win) return false;
+  try { win.setOverlayIcon(null, ''); return true; } catch (_) { return false; }
 });
 
 // --- daily tasks (To-Do) ---

@@ -44,6 +44,63 @@ let clickSounds = [];
 let clickByName = new Map();
 let endSoundPool = [];
 
+// Overlay drawing (small PNG with remaining time)
+const overlayCanvas = document.createElement('canvas');
+overlayCanvas.width = 64; overlayCanvas.height = 64; // Windows overlay prefers small square
+const overlayCtx = overlayCanvas.getContext('2d');
+
+function drawAndSetOverlay(seconds, mode, running) {
+  if (!window.overlay || typeof window.overlay.set !== 'function') return;
+  const m = Math.floor(Math.max(0, seconds) / 60);
+  const s = Math.max(0, seconds) % 60;
+  const text = m > 0 ? String(m) : String(s);
+
+  const COLORS = {
+    work: { bg: '#112033', stroke: '#3ea6ff', text: '#ffffff' },
+    break: { bg: '#112e19', stroke: '#3aff6a', text: '#ffffff' },
+    paused: { bg: '#2b2b2b', stroke: '#f0c040', text: '#ffffff' },
+  };
+  const theme = running ? (mode === 'break' ? COLORS.break : COLORS.work) : COLORS.paused;
+
+  const ctx = overlayCtx;
+  ctx.clearRect(0, 0, 64, 64);
+  // background circle
+  ctx.beginPath();
+  ctx.arc(32, 32, 30, 0, Math.PI * 2);
+  ctx.fillStyle = theme.bg;
+  ctx.fill();
+  ctx.lineWidth = 4;
+  ctx.strokeStyle = theme.stroke;
+  ctx.stroke();
+
+  // content: time or pause icon
+  if (running) {
+    ctx.fillStyle = theme.text;
+    const isTwoPlus = text.length >= 2;
+    ctx.font = `${isTwoPlus ? 34 : 40}px sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(text, 32, 34);
+  } else {
+    // pause icon "||"
+    ctx.fillStyle = theme.stroke;
+    const barW = 8, barH = 26, gap = 8;
+    const y = 32 - barH / 2;
+    ctx.fillRect(32 - gap/2 - barW, y, barW, barH);
+    ctx.fillRect(32 + gap/2, y, barW, barH);
+  }
+
+  const dataUrl = overlayCanvas.toDataURL('image/png');
+  const desc = running ? `${mode === 'break' ? 'Break' : 'Work'} ${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}` : 'Paused';
+  window.overlay.set(dataUrl, desc);
+}
+
+function clearOverlay() {
+  if (window.overlay && typeof window.overlay.clear === 'function') {
+    window.overlay.clear();
+  }
+}
+
 async function loadSoundPool() {
   // preload click sounds
   clickSounds = CLICK_SOUND_FILES.map((file) => {
@@ -213,6 +270,8 @@ function tick() {
   if (remainingSeconds > 0) {
     remainingSeconds -= 1;
     updateDisplay();
+    // update overlay icon each second while running
+    try { drawAndSetOverlay(remainingSeconds, currentMode, true); } catch (_) {}
     timerId = setTimeout(tick, 1000);
   } else {
     playRandomEndSound();
@@ -231,6 +290,8 @@ function tick() {
     } else {
       setMode('work');
     }
+    // after switching mode keep running and refresh overlay for new session
+    try { drawAndSetOverlay(remainingSeconds, currentMode, true); } catch (_) {}
     timerId = setTimeout(tick, 1000);
   }
 }
@@ -241,16 +302,20 @@ async function handleStart() {
   // If starting after a reset ensure the current mode duration is set
   if (remainingSeconds <= 0) setMode(currentMode);
   tick();
+  try { drawAndSetOverlay(remainingSeconds, currentMode, true); } catch (_) {}
 }
 
 function handlePause() {
   if (isRunning) {
     isRunning = false;
     if (timerId) clearTimeout(timerId);
+    // show paused state on overlay
+    try { drawAndSetOverlay(remainingSeconds, currentMode, false); } catch (_) {}
   } else {
     // Resume
     isRunning = true;
     tick();
+    try { drawAndSetOverlay(remainingSeconds, currentMode, true); } catch (_) {}
   }
 }
 
@@ -263,6 +328,7 @@ function handleReset() {
   isRunning = false;
   if (timerId) clearTimeout(timerId);
   setMode('work');
+  clearOverlay();
 }
 
 // Init
