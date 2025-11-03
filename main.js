@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, nativeImage } = require('electron');
+const { app, BrowserWindow, ipcMain, nativeImage, powerSaveBlocker } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
@@ -18,7 +18,8 @@ function createMainWindow() {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
       nodeIntegration: false,
-      sandbox: false
+      sandbox: false,
+      backgroundThrottling: false
     }
   });
 
@@ -163,6 +164,28 @@ ipcMain.handle('app:clearOverlayIcon', async () => {
   const win = BrowserWindow.getFocusedWindow() || BrowserWindow.getAllWindows()[0];
   if (!win) return false;
   try { win.setOverlayIcon(null, ''); return true; } catch (_) { return false; }
+});
+
+// Power save blocker to keep timers accurate when minimized
+let psbId = null;
+ipcMain.handle('app:powerSave', async (_e, enable) => {
+  const on = !!enable;
+  try {
+    if (on) {
+      if (psbId == null || !powerSaveBlocker.isStarted(psbId)) {
+        psbId = powerSaveBlocker.start('prevent-app-suspension');
+      }
+      return true;
+    } else {
+      if (psbId != null && powerSaveBlocker.isStarted(psbId)) {
+        powerSaveBlocker.stop(psbId);
+      }
+      psbId = null;
+      return true;
+    }
+  } catch (_) {
+    return false;
+  }
 });
 
 // --- daily tasks (To-Do) ---

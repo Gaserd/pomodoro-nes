@@ -303,6 +303,7 @@ async function handleStart() {
   if (remainingSeconds <= 0) setMode(currentMode);
   tick();
   try { drawAndSetOverlay(remainingSeconds, currentMode, true); } catch (_) {}
+  try { if (window.powerSave && window.powerSave.enable) window.powerSave.enable(); } catch (_) {}
 }
 
 function handlePause() {
@@ -311,11 +312,13 @@ function handlePause() {
     if (timerId) clearTimeout(timerId);
     // show paused state on overlay
     try { drawAndSetOverlay(remainingSeconds, currentMode, false); } catch (_) {}
+    try { if (window.powerSave && window.powerSave.disable) window.powerSave.disable(); } catch (_) {}
   } else {
     // Resume
     isRunning = true;
     tick();
     try { drawAndSetOverlay(remainingSeconds, currentMode, true); } catch (_) {}
+    try { if (window.powerSave && window.powerSave.enable) window.powerSave.enable(); } catch (_) {}
   }
 }
 
@@ -329,6 +332,7 @@ function handleReset() {
   if (timerId) clearTimeout(timerId);
   setMode('work');
   clearOverlay();
+  try { if (window.powerSave && window.powerSave.disable) window.powerSave.disable(); } catch (_) {}
 }
 
 // Init

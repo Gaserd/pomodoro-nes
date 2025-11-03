@@ -26,6 +26,11 @@ contextBridge.exposeInMainWorld('overlay', {
   clear: () => ipcRenderer.invoke('app:clearOverlayIcon'),
 });
 
+contextBridge.exposeInMainWorld('powerSave', {
+  enable: () => ipcRenderer.invoke('app:powerSave', true),
+  disable: () => ipcRenderer.invoke('app:powerSave', false),
+});
+
 window.addEventListener('DOMContentLoaded', () => {
   // no-op
 });
