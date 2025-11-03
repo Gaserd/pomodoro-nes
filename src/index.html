@@ -15,7 +15,10 @@
     <div class="app">
       <header class="header">
         <h1 class="nes-text is-primary">Pomodoro Timer</h1>
-        <button id="close-btn" class="nes-btn is-error" title="Close" aria-label="Close">✕</button>
+        <div class="window-buttons">
+          <button id="minimize-btn" class="nes-btn" title="Minimize" aria-label="Minimize">–</button>
+          <button id="close-btn" class="nes-btn is-error" title="Close" aria-label="Close">✕</button>
+        </div>
       </header>
 
       <section class="controls nes-container with-title">
@@ -53,6 +56,16 @@
           <span id="coin-count" class="nes-text is-warning">0</span>
         </div>
         <div id="coin-wall" class="coin-wall" aria-label="earned coins"></div>
+      </section>
+
+      <section class="todos nes-container with-title">
+        <p class="title">Today's To-Do</p>
+        <div class="row">
+          <input id="todo-input" class="nes-input" type="text" placeholder="Add a task and press Enter" />
+          <button id="todo-add" class="nes-btn is-primary" style="margin-left: 10px;">Add</button>
+          <button id="todo-clear" class="nes-btn is-error" style="margin-left: 10px;">Clear done</button>
+        </div>
+        <ul id="todo-list" class="nes-list is-disc" aria-label="today todo list"></ul>
       </section>
 
       <section class="stats nes-container with-title">

@@ -138,4 +138,75 @@ ipcMain.handle('app:close', async () => {
   return true;
 });
 
+ipcMain.handle('app:minimize', async () => {
+  const win = BrowserWindow.getFocusedWindow();
+  if (win) win.minimize();
+  return true;
+});
+
+// --- daily tasks (To-Do) ---
+function readTasksAll() {
+  const all = readStats();
+  const tasks = (all && typeof all === 'object' ? all._tasks : null);
+  return tasks && typeof tasks === 'object' ? tasks : {};
+}
+
+function writeTasksAll(tasksByDate) {
+  const all = readStats();
+  const out = { ...all, _tasks: tasksByDate };
+  writeStats(out);
+}
+
+function generateTaskId() {
+  return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+}
+
+ipcMain.handle('tasks:loadToday', async () => {
+  const key = todayKey();
+  const tasksAll = readTasksAll();
+  return Array.isArray(tasksAll[key]) ? tasksAll[key] : [];
+});
+
+ipcMain.handle('tasks:add', async (_e, text) => {
+  const key = todayKey();
+  const tasksAll = readTasksAll();
+  const list = Array.isArray(tasksAll[key]) ? tasksAll[key] : [];
+  const trimmed = String(text || '').trim();
+  if (!trimmed) return list;
+  const next = [...list, { id: generateTaskId(), text: trimmed, done: false }];
+  tasksAll[key] = next;
+  writeTasksAll(tasksAll);
+  return next;
+});
+
+ipcMain.handle('tasks:toggle', async (_e, id) => {
+  const key = todayKey();
+  const tasksAll = readTasksAll();
+  const list = Array.isArray(tasksAll[key]) ? tasksAll[key] : [];
+  const next = list.map((t) => t && t.id === id ? { ...t, done: !t.done } : t);
+  tasksAll[key] = next;
+  writeTasksAll(tasksAll);
+  return next;
+});
+
+ipcMain.handle('tasks:remove', async (_e, id) => {
+  const key = todayKey();
+  const tasksAll = readTasksAll();
+  const list = Array.isArray(tasksAll[key]) ? tasksAll[key] : [];
+  const next = list.filter((t) => t && t.id !== id);
+  tasksAll[key] = next;
+  writeTasksAll(tasksAll);
+  return next;
+});
+
+ipcMain.handle('tasks:clearCompleted', async () => {
+  const key = todayKey();
+  const tasksAll = readTasksAll();
+  const list = Array.isArray(tasksAll[key]) ? tasksAll[key] : [];
+  const next = list.filter((t) => t && !t.done);
+  tasksAll[key] = next;
+  writeTasksAll(tasksAll);
+  return next;
+});
+
 

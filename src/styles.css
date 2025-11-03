@@ -7,7 +7,8 @@ body {
 
 .app { max-width: 960px; margin: 0 auto; padding: 24px; }
 .header { display: flex; align-items: center; justify-content: space-between; -webkit-app-region: drag; }
-.header #close-btn { -webkit-app-region: no-drag; }
+.header .window-buttons { display: inline-flex; gap: 8px; -webkit-app-region: no-drag; }
+.header .window-buttons > button { -webkit-app-region: no-drag; }
 .header h1 { margin: 0; font-size: 20px; }
 
 .controls { margin-top: 16px; }
@@ -27,6 +28,10 @@ button, input, select, textarea, .nes-container, .coin-wall { -webkit-app-region
 .rewards { margin-top: 18px; }
 .rewards .rewards-row { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; }
 .coin-wall { display: flex; flex-wrap: wrap; gap: 8px 10px; }
+
+.todos { margin-top: 18px; }
+.todos .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.todos #todo-input { flex: 1 1 280px; min-width: 240px; }
 
 .stats { margin-top: 18px; }
 .calendar { width: 100%; }

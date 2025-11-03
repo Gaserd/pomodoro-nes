@@ -9,10 +9,15 @@ const breakMinInput = document.getElementById('break-min');
 const coinCountEl = document.getElementById('coin-count');
 const coinWallEl = document.getElementById('coin-wall');
 const closeBtn = document.getElementById('close-btn');
+const minimizeBtn = document.getElementById('minimize-btn');
 const calendarGrid = document.getElementById('calendar-grid');
 const calTitleText = document.getElementById('cal-title-text');
 const calPrevBtn = document.getElementById('cal-prev');
 const calNextBtn = document.getElementById('cal-next');
+const todoInput = document.getElementById('todo-input');
+const todoAddBtn = document.getElementById('todo-add');
+const todoClearBtn = document.getElementById('todo-clear');
+const todoListEl = document.getElementById('todo-list');
 
 let timerId = null;
 let remainingSeconds = 25 * 60;
@@ -86,6 +91,57 @@ function renderCoins(count) {
     const span = document.createElement('span');
     span.className = 'nes-icon coin is-large';
     coinWallEl.appendChild(span);
+  }
+}
+
+function el(tag, className, text) {
+  const e = document.createElement(tag);
+  if (className) e.className = className;
+  if (text != null) e.textContent = String(text);
+  return e;
+}
+
+function renderTodoList(items) {
+  if (!todoListEl) return;
+  todoListEl.innerHTML = '';
+  if (!Array.isArray(items)) return;
+  for (const t of items) {
+    const li = document.createElement('li');
+    const label = document.createElement('label');
+    label.style.display = 'flex';
+    label.style.alignItems = 'center';
+    label.style.gap = '10px';
+
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.checked = !!t.done;
+    checkbox.addEventListener('change', async () => {
+      try {
+        const list = await window.tasks.toggle(t.id);
+        renderTodoList(list);
+      } catch (_) {}
+    });
+
+    const span = el('span', null, t.text || '');
+    if (t.done) {
+      span.style.textDecoration = 'line-through';
+      span.style.opacity = '0.7';
+    }
+
+    const removeBtn = el('button', 'nes-btn is-error', '✕');
+    removeBtn.style.marginLeft = 'auto';
+    removeBtn.addEventListener('click', async () => {
+      try {
+        const list = await window.tasks.remove(t.id);
+        renderTodoList(list);
+      } catch (_) {}
+    });
+
+    label.appendChild(checkbox);
+    label.appendChild(span);
+    label.appendChild(removeBtn);
+    li.appendChild(label);
+    todoListEl.appendChild(li);
   }
 }
 
@@ -270,5 +326,49 @@ if (closeBtn) {
     }
   });
 }
+
+if (minimizeBtn) {
+  minimizeBtn.addEventListener('click', () => {
+    if (window.windowControls && window.windowControls.minimize) {
+      window.windowControls.minimize();
+    }
+  });
+}
+
+// To-Do init and handlers
+async function initTodo() {
+  if (!window.tasks) return;
+  try {
+    const list = await window.tasks.loadToday();
+    renderTodoList(list);
+  } catch (_) {}
+}
+
+if (todoAddBtn && todoInput) {
+  const add = async () => {
+    const text = (todoInput.value || '').trim();
+    if (!text) return;
+    try {
+      const list = await window.tasks.add(text);
+      todoInput.value = '';
+      renderTodoList(list);
+    } catch (_) {}
+  };
+  todoAddBtn.addEventListener('click', add);
+  todoInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') add();
+  });
+}
+
+if (todoClearBtn) {
+  todoClearBtn.addEventListener('click', async () => {
+    try {
+      const list = await window.tasks.clearCompleted();
+      renderTodoList(list);
+    } catch (_) {}
+  });
+}
+
+initTodo();
 
 
