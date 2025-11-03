@@ -34,10 +34,34 @@ const CLICK_SOUND_MAP = {
   reset: 'big-button-129050.mp3',
 };
 const END_SOUND_FILES = [
+  // keep existing finish sounds
   'Voicy_YAHOO.mp3',
   'whistle-47997.mp3',
   'victory-1-90174.mp3',
   'mario-coin-200bpm-82548.mp3',
+  // expanded library (excluding button click sounds)
+  '04-stage-start.mp3',
+  '139-item-catch.mp3',
+  '3-2-1-go-green-screen-footage-2xoehcl8evq.mp3',
+  '8d82b5_doom_shotgun_firing_sound_effect.mp3',
+  '8d82b5_sc_marine_you_wanna_piece_of_me_boy_sound_effect.mp3',
+  'batman-transition-download-sound-link.mp3',
+  'for-the-emperor_CDrYyoT.mp3',
+  'icandothat.mp3',
+  'mlg-resource-street-fighter-ko-greenscreen.mp3',
+  'overtime.mp3',
+  'ryka.mp3',
+  'space-marine-attack.mp3',
+  'ssbannouncer-game.mp3',
+  'super-mario-beedoo_F3cwLoe.mp3',
+  'the-ultimate-world-of-warcraft-sms-sound-hdhq-3-quest-complete-27b_nukk0k0.mp3',
+  'tmpb1ci9teh.mp3',
+  'wc3-peon-says-work-work-only-.mp3',
+  'welcome-mercador-resident-evil-4.mp3',
+  'world_of_warcraft_-_alliance_battleground_victory.mp3',
+  'wow-incredible-meme-with-sound.mp3',
+  'ww_beedle_thankyou.mp3',
+  'z40-thank-you-mp3.mp3',
 ];
 
 let clickSounds = [];
